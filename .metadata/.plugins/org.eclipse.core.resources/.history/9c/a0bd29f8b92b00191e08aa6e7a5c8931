@@ -1,0 +1,22 @@
+
+public class ObjetoX {
+	//Rellenamos esta clase con lo que necesitemos.....
+	//
+	//
+	//
+	//
+	//
+	
+	//Constructor
+	public ObjetoX() {
+		
+	}
+	
+	//FALTA IMPLEMENTAR LOS GETTERS Y SETTERS...
+	
+	//Metodo print
+	public void print() {
+		System.out.println("-- ObjetoX propiedades --");
+	}
+
+}

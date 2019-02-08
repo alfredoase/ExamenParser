@@ -1,0 +1,108 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+public class Parser {
+	private Document dom = null;
+	private ArrayList<Asignatura> listaAsignaturas = null;
+	
+	public Parser() {
+		listaAsignaturas = new ArrayList<Asignatura>();
+	}
+	
+	//Con este metodo creamos la instancia al DocumentBuilderFactory y el DocumentBuilder
+	//para poder trabajar con el dom, por medio del metodo parse(fichero).
+	public void parseFileXML(String file) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		try {
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			dom = db.parse(file);
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+	
+	
+	//Con este parseamos el documento, para obtener el nodo raiz...
+	public void parseDocument() {
+		Element docEle = dom.getDocumentElement();
+		String searchTag = "asignaturas";
+		
+		//Lista de los nodos, en este caso seria solo del raiz.
+		NodeList nl = docEle.getElementsByTagName(searchTag);
+		if(nl != null && nl.getLength() > 0) {
+			for(int i = 0; i < nl.getLength(); i++) {
+				Element el = (Element) nl.item(i);
+				
+				//Este metodo hace referencia al metodo que tenemos creado abajao para sacar los valores
+				//de las diferentes etiquetas del objeto que nos den.
+				Asignatura obj = getObjeto(el);
+				
+				listaAsignaturas.add(obj);
+			}
+		}
+	}
+	
+	//Metodo para obtener los diferentes valores del objeto para su posterior creacion....
+	private Asignatura getObjeto(Element libroEle) {
+		//Metodo para obtener el valor, STRING, segun el elemento que le pasamos, y la etiqueta...
+		String titulo = getTextValue(libroEle, "asignatura");
+		
+		//Metodo para obtener el valor, INT, segun el elemento que le pasamos, y la etiqueta...
+		int paginas = getIntValue(libroEle, "horas");
+		
+		//Creamos el objeto.....
+		Asignatura obj = new Asignatura();
+		
+		//Devolvemos el objeto, para añadirlo a la lista en el metodo de arriba del parsedocument
+		return obj;
+	}
+	
+	//Metodo para obtener el valor del nodo segun el elemento que le pasamos, y la etiqueta...
+	private String getTextValue(Element ele, String tagName) {
+		String textValue = null;
+		NodeList nl = ele.getElementsByTagName(tagName);
+		for(int i = 0; i < nl.getLength(); i++) {
+			Element el = (Element) nl.item(i);
+			
+			//Se hace una comprobacion, y con el getFirstChild y el getNodeValue, obtenemos el valor
+			//y lo metemos en la variable textValue definida arriba y la devolvemos, ya que el metodo es un string.
+			if(nl != null && nl.getLength() > 0) {
+				String elValue = el.getFirstChild().getNodeValue();
+				textValue = elValue;
+			}
+
+		}
+		return textValue;
+	}
+	
+	//Se hace uso del getTextValue y lo parseamos para convertirlo en int...
+	private int getIntValue(Element ele, String tagName) {				
+		return Integer.parseInt(getTextValue(ele,tagName));
+	}
+	
+	//Metodo print, que recorre la lista de objetos, por medio del iterator
+	public void print(){
+		Iterator it = listaAsignaturas.iterator();
+		while(it.hasNext()) {
+			Asignatura obj = (Asignatura) it.next();
+			
+			obj.print();
+		}
+	}
+}

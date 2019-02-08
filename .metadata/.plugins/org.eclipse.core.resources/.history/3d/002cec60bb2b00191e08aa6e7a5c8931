@@ -1,0 +1,20 @@
+import java.util.ArrayList;
+
+public class Asignatura {
+	private String nombreAsignatura;
+	private int horasAsignatura;
+	private String profesor;
+	
+	//Constructor
+	public Asignatura() {
+		
+	}
+	
+	//FALTA IMPLEMENTAR LOS GETTERS Y SETTERS...
+	
+	//Metodo print
+	public void print() {
+		System.out.println("-- ObjetoX propiedades --");
+	}
+
+}
